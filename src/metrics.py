@@ -7,6 +7,7 @@ import pandas as pd
 import numpy as np
 from datetime import datetime
 
+
 class MetricsCalculator:
     """Calculate all key metrics from cleaned data"""
     
@@ -44,7 +45,7 @@ class MetricsCalculator:
     def calculate_handle_time_metrics(self):
         """Calculate handle time metrics"""
         tickets = self.data['tickets'].copy()
-        tickets['handle_time_min'] = (tickets['first_response_at'] - tickets['created_at']).dt.total_seconds() / 60
+        tickets['handle_time_min'] = (tickets['resolved_at'] - tickets['first_response_at']).dt.total_seconds() / 60
         
         avg_ht = tickets['handle_time_min'].mean()
         median_ht = tickets['handle_time_min'].median()
@@ -63,7 +64,7 @@ class MetricsCalculator:
     def calculate_agent_metrics(self):
         """Calculate metrics by agent"""
         tickets = self.data['tickets'].copy()
-        tickets['handle_time_min'] = (tickets['first_response_at'] - tickets['created_at']).dt.total_seconds() / 60
+        tickets['handle_time_min'] = (tickets['resolved_at'] - tickets['first_response_at']).dt.total_seconds() / 60
         
         agents_df = self.data['agents']
         
@@ -100,7 +101,7 @@ class MetricsCalculator:
     def calculate_channel_metrics(self):
         """Calculate metrics by channel"""
         tickets = self.data['tickets'].copy()
-        tickets['handle_time_min'] = (tickets['first_response_at'] - tickets['created_at']).dt.total_seconds() / 60
+        tickets['handle_time_min'] = (tickets['resolved_at'] - tickets['first_response_at']).dt.total_seconds() / 60
         
         channel_metrics = []
         

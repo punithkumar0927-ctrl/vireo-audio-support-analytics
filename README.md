@@ -284,9 +284,11 @@ AI classification (too expensive), SLA automation (complex logic), predictive mo
 
 Data quality scorecard, agent tenure analysis, refund reason breakdowns.
 
-### Q8: used?
+### Q8: What tools and methods were used?
 
- Phase 1 analysis + Phase 3 logic definition (not in final tool). Zero paid APIs.
+The project uses Python, pandas, NumPy, Plotly, and Streamlit. The final dashboard
+does not call an external model or service. All metrics are calculated directly
+from the CSV files, which keeps the results reproducible and easy to audit.
 
 ### Q9: Google Drive link
 

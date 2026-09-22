@@ -327,7 +327,7 @@ elif page == "📉 Trends":
     
     tickets = data['tickets'].copy()
     tickets['year_month'] = tickets['created_at'].dt.to_period('M')
-    tickets['handle_time_min'] = (tickets['first_response_at'] - tickets['created_at']).dt.total_seconds() / 60
+    tickets['handle_time_min'] = (tickets['resolved_at'] - tickets['first_response_at']).dt.total_seconds() / 60
     
     monthly = tickets.groupby('year_month').agg({
         'ticket_id': 'count',

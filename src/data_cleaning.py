@@ -153,7 +153,7 @@ class DataCleaner:
         print("=" * 80)
         
         df = self.data['tickets']
-        df['handle_time_min'] = (df['first_response_at'] - df['created_at']).dt.total_seconds() / 60
+        df['handle_time_min'] = (df['resolved_at'] - df['first_response_at']).dt.total_seconds() / 60
         
         print(f"\nTotal Tickets: {len(df):,}")
         print(f"CSAT Responses: {df['csat_score'].notna().sum():,} ({df['csat_score'].notna().sum()/len(df)*100:.1f}%)")
