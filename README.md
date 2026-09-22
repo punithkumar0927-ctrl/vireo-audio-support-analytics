@@ -310,6 +310,10 @@ https://github.com/your-username/vireo-audio-support-analytics
 
 ---
 
+local host:
+
+http://localhost:8501/
+
 ## How to Contribute
 
 1. Fork the repository
