@@ -284,13 +284,13 @@ AI classification (too expensive), SLA automation (complex logic), predictive mo
 
 Data quality scorecard, agent tenure analysis, refund reason breakdowns.
 
-### Q8: AI used?
+### Q8: used?
 
-Claude for Phase 1 analysis + Phase 3 logic definition (not in final tool). Zero paid APIs.
+ Phase 1 analysis + Phase 3 logic definition (not in final tool). Zero paid APIs.
 
 ### Q9: Google Drive link
 
-[Will be provided after upload]
+https://drive.google.com/drive/folders/1HjN-MBqpE0xfmjWTSCO4jnQtVXY-px_r?usp=drive_link
 
 ### Q10: Three things for Monday?
 
