@@ -1,0 +1,33 @@
+# Data files (sensitive customer data)
+*.csv
+tickets.csv
+agents.csv
+customers.csv
+orders.csv
+products.csv
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Streamlit
+.streamlit/
+
+# Local runtime logs
+*.log
