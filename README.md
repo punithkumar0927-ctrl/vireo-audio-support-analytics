@@ -1,346 +1,374 @@
 # Vireo Audio Customer Support Analytics Dashboard
 
-**Professional Customer Support Analytics Tool**  
-Built for Priya Raman, Head of Customer Experience at Vireo Audio
+## Professional Customer Support Analytics Tool
 
----
+A Streamlit dashboard for analyzing customer-support operations at Vireo Audio. It analyzes support-ticket data to help customer-experience teams monitor CSAT, handle time, agent performance, monthly trends, training needs, and data quality.
 
-## Overview
+Built for **Priya Raman, Head of Customer Experience at Vireo Audio**.
 
-This project analyzes 11,750 support tickets (Jan 2025 - Jun 2026) across 44 agents and 5,339 customers to provide:
+> **Note:** This is an internal analytics project. The dashboard is designed for operational decision support and does not use external AI APIs or per-ticket AI classification.
 
-- **CSAT & Performance Metrics** by individual agent
-- **Handle Time Analysis** by channel and agent
-- **Monthly Trends** showing volume, satisfaction, and response time
-- **Training Recommendations** with data-driven insights
-- **Data Quality Validation** ensuring analysis reliability
+## Business Objective
 
-### Key Findings (Current)
+The dashboard helps Vireo Audio reduce repeat support contacts by identifying training opportunities using reliable, policy-aware performance metrics.
 
-- **11,750 total tickets** across 4 channels (Chat, Email, Voice, Social)
-- **44.2% CSAT response rate** (aligns with policy expectation)
-- **3.33/5.0 average CSAT** where customers responded
-- **26 min median handle time** (98 min mean, skewed by email)
-- **45.8% positive ratings** (scores 4-5)
+It separates Tier 1 and Tier 2 agents because Tier 2 handles escalations and warranty cases, making direct volume or CSAT comparisons potentially unfair.
 
----
+## Key Findings
+
+| Metric | Result |
+|---|---:|
+| Total support tickets | 11,750 |
+| Time period | January 2025 to June 2026 |
+| Agents analyzed | 44 |
+| Customers analyzed | 5,339 |
+| Support channels | 4 |
+| CSAT response rate | 44.2% |
+| Average CSAT score | 3.33 / 5.0 |
+| Median handle time | 26 minutes |
+| Mean handle time | 98 minutes |
+| Positive ratings, score 4–5 | 45.8% |
+
+The dataset covers Chat, Email, Voice, and Social channels. The mean handle time is higher than the median because email tickets create a right-skewed distribution.
+
+## Features
+
+- 📈 Executive overview of support volume, CSAT, and handle-time metrics
+- 👥 Agent-level performance analysis
+- 📊 CSAT score distribution and response-rate reporting
+- 📉 Monthly trends for ticket volume, CSAT, and median handle time
+- ⚠️ Training recommendations using CSAT and minimum sample-size criteria
+- 🧩 Tier 1 and Tier 2 performance separation
+- ✅ Data-quality checks, missing-value analysis, and foreign-key validation
+- 🧪 Unit tests for metric calculations
+- 💰 Deterministic Python calculations with no paid AI or API usage
+
+## Dashboard Pages
+
+### 1. Overview
+
+Displays:
+
+- Total support tickets
+- CSAT response rate
+- Average CSAT score
+- Channel-level ticket distribution
+- CSAT score distribution
+- High-level operational summary
+
+### 2. Agent Performance
+
+Displays individual agent metrics, including:
+
+- Ticket volume
+- CSAT score
+- CSAT response count
+- Median handle time
+- Team and tier filters
+- Minimum-ticket-count filter
+- CSAT-versus-handle-time scatter plot
+
+> ⚠️ Tier 2 agents should not be directly compared with Tier 1 agents because Tier 2 handles more complex escalations and warranty cases.
+
+### 3. Trends
+
+Displays monthly trends for:
+
+- Ticket volume
+- Average CSAT
+- Median handle time
+- Monthly performance comparisons
+
+### 4. Training Review
+
+Identifies potential training candidates using these rules:
+
+- Tier 1 agents only
+- CSAT score less than or equal to 3.0
+- Minimum sample size of 30 tickets or responses
+- Action recommendations based on observed performance
+
+This avoids unfairly flagging low-volume agents or Tier 2 escalation agents.
+
+### 5. Data Quality
+
+Displays:
+
+- Foreign-key integrity checks
+- Missing-value analysis
+- Duplicate checks
+- Date parsing validation
+- Known data limitations
+- Reliability notes for legacy records
+
+## Business Outcome and ROI
+
+### Baseline
+
+- Repeat contacts account for 12.5% of tickets.
+- Estimated repeat contacts: 1,469 per quarter.
+- Estimated cost per repeat contact: ₹290.
+- Estimated quarterly repeat-contact cost: ₹425,610.
+
+### Target
+
+The goal is to reduce repeat contacts from 12.5% to 10% through targeted Tier 1 agent training.
+
+| Item | Estimate |
+|---|---:|
+| Expected reduction | 2.5% |
+| Avoided repeat contacts per quarter | Approximately 37 |
+| Savings per quarter | ₹10,730 |
+| Estimated savings per year | ₹42,920 |
+| One-time development cost | ₹907.50 |
+| Monthly API cost | ₹0 |
+| Estimated first-quarter return | 47× |
+
+## Key Design Decisions
+
+### Tier 1 and Tier 2 Separation
+
+**Original request:** Flag the bottom ten agents for retraining.
+
+**Implemented approach:** Analyze Tier 1 and Tier 2 agents separately.
+
+**Reason:** Tier 2 agents manage more difficult cases, such as escalations and warranty issues. Comparing them directly against Tier 1 agents could produce unfair conclusions.
+
+### Minimum Sample Size
+
+**Original request:** Flag the bottom ten agents without a minimum sample requirement.
+
+**Implemented approach:** Review agents only when they have at least 30 tickets or responses.
+
+**Reason:** The CSAT response rate is 44.2%, and small samples can produce unreliable scores.
+
+### No AI Ticket Classification
+
+**Decision:** Use deterministic analysis based on existing ticket-category data.
+
+**Reason:** Per-ticket AI model calls would create unnecessary cost. The Python-based approach is reproducible, auditable, and has no API cost.
+
+## Technologies Used
+
+- Python
+- Streamlit
+- Pandas
+- NumPy
+- Plotly
+- Pytest
+- CSV datasets
+- Git and GitHub
 
 ## Project Structure
 
-```
+```text
 vireo-audio-support-analytics/
 │
 ├── app.py                     # Main Streamlit dashboard
 ├── requirements.txt           # Python dependencies
-├── README.md                  # This file
+├── README.md                  # Project documentation
 ├── .gitignore                 # Git ignore patterns
 │
 ├── data/
-│   └── README.md              # Data dictionary & assumptions
+│   └── README.md              # Data dictionary and assumptions
 │
 ├── src/
-│   ├── data_cleaning.py       # Phase 2: Data validation & cleaning
-│   ├── metrics.py             # Phase 4: Metric calculations
-│   └── validation.py          # Phase 8: Testing & validation
+│   ├── data_cleaning.py       # Data validation and cleaning
+│   ├── metrics.py             # Metric calculations
+│   └── validation.py          # Testing and validation logic
 │
 ├── reports/
-│   ├── business_memo.md       # One-page memo for Priya
+│   ├── business_memo.md       # Business memo for Priya Raman
 │   ├── validation_report.md   # Testing results
-│   └── submission_answers.md  # Submission form responses
+│   └── submission_answers.md  # Project submission answers
 │
 ├── tests/
 │   └── test_metrics.py        # Unit tests for calculations
 │
 └── prompts/
-    └── claude_usage.md        # AI tools used & their impact
+    └── claude_usage.md        # AI tool usage documentation
 ```
 
----
+## Data Files
 
-## Quick Start
+Place the following CSV files in the project root before running the dashboard:
+
+```text
+tickets.csv
+agents.csv
+customers.csv
+orders.csv
+products.csv
+```
+
+> Do not upload confidential customer data, personally identifiable information, or internal company datasets to a public GitHub repository.
+
+## Installation
 
 ### Prerequisites
 
-- Python 3.14 (or another version supported by the current pandas and NumPy wheels)
+Install:
+
+- Python 3.14 or a Python version compatible with the project dependencies
 - pip
+- Git
 
-### Installation
+### 1. Clone the Repository
 
-1. **Clone the repository**
+```bash
+git clone [https://github.com/punithkumar0927-ctrl/vireo-audio-support-analytics.git](https://github.com/punithkumar0927-ctrl/vireo-audio-support-analytics.git)
+```
 
-   ```bash
-   git clone https://github.com/your-username/vireo-audio-support-analytics.git
-   cd vireo-audio-support-analytics
-   ```
+### 2. Navigate to the Project Folder
 
-2. **Install dependencies**
+```bash
+cd vireo-audio-support-analytics
+```
 
-   ```bash
-   pip install -r requirements.txt
-   ```
+### 3. Create and Activate a Virtual Environment
 
-3. **Place data files in project root**
+**Windows:**
 
-   ```
-   tickets.csv
-   agents.csv
-   customers.csv
-   orders.csv
-   products.csv
-   ```
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
 
-4. **Run the dashboard**
+**macOS/Linux:**
 
-   ```bash
-   streamlit run app.py
-   ```
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
 
-5. **View in browser**
-   - Opens automatically at `http://localhost:8501`
+### 4. Install Dependencies
 
-On Windows, you can also double-click `run_dashboard.bat`. Keep the terminal window
-open while using the dashboard.
+```bash
+pip install -r requirements.txt
+```
 
----
+### 5. Add Data Files
 
-## Dashboard Pages
+Place the required CSV files in the project root:
 
-### 1. 📈 Overview
+```text
+tickets.csv
+agents.csv
+customers.csv
+orders.csv
+products.csv
+```
 
-- Total tickets, CSAT response rate, average CSAT
-- Channel breakdown (Chat 43.4%, Email 31%, Voice 15.6%, Social 10%)
-- CSAT score distribution
+### 6. Run the Dashboard
 
-### 2. 👥 Agent Performance
+```bash
+streamlit run app.py
+```
 
-- Individual agent metrics (tickets, CSAT, handle time)
-- Filterable by Tier, Team, minimum ticket count
-- Scatter plot: CSAT vs Handle Time
-- **⚠️ Warning**: Tier 2 agents NOT directly comparable (harder cases by design)
+The dashboard opens automatically in your browser at:
 
-### 3. 📉 Trends
+```text
+http://localhost:8501
+```
 
-- Monthly ticket volume trend
-- CSAT trend (compare vs monthly average)
-- Median handle time trend over time
+## Run Tests
 
-### 4. ⚠️ Training Review
+Run unit tests using:
 
-- Agents with CSAT ≤ 3.0 and n ≥ 30 tickets
-- **Tier 1 only** (per policy, Tier 2 measured differently)
-- Recommended actions per candidate
+```bash
+pytest
+```
 
-### 5. 📋 Data Quality
+Or run the specific metric test file:
 
-- Foreign key validation (100% integrity)
-- Missing values analysis
-- Known limitations (legacy data, IVR junk, etc.)
+```bash
+pytest tests/test_metrics.py
+```
 
----
+## Validation Results
 
-## Key Decisions & Trade-offs
+The dashboard calculations were checked against manual SQL or Pandas calculations using a sample of five agents and approximately 3,000 tickets.
 
-### Changed from Client's Original Request
+| Metric | Validation Result |
+|---|---:|
+| CSAT calculation error | 0.3% |
+| Handle-time calculation error | 0.8% |
+| Ticket-volume calculation error | 0% |
+| Acceptance threshold | ±2% |
+| Overall result | All tests passed |
 
-**1. Tier 1 vs Tier 2 Separation** ✅
+## Data Quality
 
-- **Client asked**: "Flag bottom ten agents for retraining"
-- **We changed to**: Separate Tier 1 (frontline) from Tier 2 (escalations/warranty)
-- **Why**: Policy §6 states "Tier 2 agents are not to be compared with Tier 1 on volume metrics"
-- **Impact**: Prevents false positives; Tier 2 handles intentionally harder cases
+### Passed Checks
 
-**2. Sample Size Minimum** ✅
+- 100% foreign-key integrity
+- No duplicate primary keys identified
+- All dates parsed successfully in IST timezone
+- CSAT response rate aligned with the expected policy value of 44.2%
+- All 11,750 tickets linked to valid customers, agents, and products
 
-- **Client asked**: Flag bottom ten (no minimum)
-- **We changed to**: Only flag agents with n ≥ 30 tickets/responses
-- **Why**: CSAT response rate is 44.2%; small samples statistically unreliable
-- **Impact**: Avoids unfair criticism of agents with low volume
+### Known Limitations
 
-**3. No AI Classification** ✅
+- Timestamps before September 14, 2025 were reconstructed from Freshdesk and may be approximate.
+- Approximately 40 IVR phone records contain failed or unusable transcript data.
+- Some Tier 2 warranty agents have fewer than 30 tickets per month.
+- CSAT values for agents with low sample sizes should be interpreted carefully.
 
-- **Why not**: Arjun said "no per-ticket model calls at ₹5 a pop" (₹10k+ cost)
-- **What we built**: Deterministic Python analysis using existing category tags
-- **Impact**: Cheap to run (₹0); still meets business need
+## Future Improvements
 
----
+- Add SLA-breach monitoring and routing analysis
+- Add secure authentication and role-based access
+- Add automated report export to PDF or Excel
+- Add configurable date ranges and business thresholds
+- Add agent-tenure analysis
+- Add refund-reason and product-issue breakdowns
+- Add forecasting for ticket volume
+- Add optional NLP analysis after privacy and cost review
+- Deploy a secure internal version of the dashboard
 
-## Business Outcome & ROI
+## Contributing
 
-### Baseline Metric
+1. Fork the repository.
+2. Create a feature branch.
 
-- **Repeat contacts**: 12.5% of all tickets are repeat contacts for same issue within 30 days
-- **Cost**: ₹290 per contact × 1,469 repeat contacts/quarter = **₹425,610 quarterly cost**
+```bash
+git checkout -b feature/improvement
+```
 
-### Target Outcome
+3. Make and test your changes.
+4. Commit your work.
 
-- **Retrain agents with CSAT ≤ 3.0** (identified in dashboard)
-- **Expected improvement**: Reduce repeat contacts to 10% (conservative)
-- **Savings**: 2.5% reduction × 1,469/quarter = ~37 avoided repeats/quarter
-- **Value**: 37 × ₹290 = **₹10,730 per quarter | ₹42,920 per year**
+```bash
+git commit -am "Add dashboard improvement"
+```
 
-### Cost
+5. Push the branch.
 
-- **Build**: One-time 5.5 hours development = ₹907.50 (at ₹165/hr)
-- **Run**: ₹0/month (no API calls, open-source stack)
-- **Maintenance**: ≤1 hour/month
-- **ROI**: 47× return in first quarter alone
+```bash
+git push origin feature/improvement
+```
 
----
+6. Open a pull request.
 
-## Data Quality & Validation
+## Support
 
-### ✅ Validation Passed
+For more information, refer to:
 
-- **Foreign Keys**: 100% integrity (all 11,750 tickets link to valid customers, agents, products)
-- **Duplicates**: None found in primary keys
-- **Dates**: All correctly parsed (IST timezone)
-- **Response Rate**: 44.2% matches policy expectation
-
-### ⚠️ Known Issues (Minor)
-
-- **Legacy data**: Timestamps before Sep 14, 2025 reconstructed from Freshdesk (approximate)
-- **IVR junk**: ~40 tickets have failed phone transcripts (filtered in analysis)
-- **Tier 2 sample size**: Some warranty agents have <30 tickets/month (flagged in dashboard)
-
----
-
-## What We Built
-
-### Included
-
-- ✅ Streamlit dashboard with 5 pages
-- ✅ CSAT & handle time metrics by agent
-- ✅ Monthly trend analysis
-- ✅ Data quality validation
-- ✅ Training review with sample size rules
-- ✅ Tier 1 vs Tier 2 separation
-- ✅ All data quality checks
-
-### Deliberately Left Out
-
-- ❌ AI ticket classification (too expensive per Arjun)
-- ❌ Predictive CSAT models (not in scope, requires ML)
-- ❌ NLP on customer messages (time constraint; manual categorization exists)
-- ❌ SLA breach automation (complex routing logic; can add later)
-
----
-
-## Testing & Validation
-
-### Sample Size
-
-- n=5 agents tested across Tier 1 + 2
-- 3,000 tickets (~26% of dataset)
-
-### Validation Method
-
-- Manual calculation of CSAT, handle time, volume
-- Compare dashboard output vs manual SQL/pandas
-- Threshold: ±2% difference acceptable
-
-### Results
-
-- ✓ CSAT calculation: 0.3% error
-- ✓ Handle time: 0.8% error
-- ✓ Volume: 0% error
-- ✓ All tests passed
-
-### Known Failure Cases
-
-- Tier 2 agents with <20 tickets: CSAT unreliable (flagged in dashboard)
-- Legacy tickets before Sep 2025: Handle time may be inaccurate (noted in Data Quality page)
-
----
-
-## Submission Form Answers
-
-### Q1: What business outcome?
-
-Reduce repeat support contacts from 12.5% to 10% (2.5% improvement) by retraining 5-8 agents identified via dashboard. Saves **₹42,920/year**.
-
-### Q2: Cost per run?
-
-**₹0** (no paid APIs). One-time build: 5.5 hours × ₹165/hr = ₹907.50. Break-even in <1 month.
-
-### Q3: How we know it works?
-
-Spot-checked 5 agents (3,000 tickets). Dashboard CSAT avg: 3.47, manual: 3.48 (0.3% error). All tests passed.
-
-### Q4: Did we change the ask?
-
-✅ **Yes**: Separated Tier 1 from Tier 2 (policy requires this). Added sample size minimum (n≥30). Skipped AI classification (Arjun's cost concern).
-
-### Q5: What's wrong?
-
-- Legacy data (Sep 2025 and before) reconstructed timestamps
-- ~40 IVR transcripts are junk (phone system)
-- Tier 2 agents have small sample sizes (flagged)
-
-### Q6: What we left out?
-
-AI classification (too expensive), SLA automation (complex logic), predictive models (not needed now).
-
-### Q7: Built but not asked?
-
-Data quality scorecard, agent tenure analysis, refund reason breakdowns.
-
-### Q8: What tools and methods were used?
-
-The project uses Python, pandas, NumPy, Plotly, and Streamlit. The final dashboard
-does not call an external model or service. All metrics are calculated directly
-from the CSV files, which keeps the results reproducible and easy to audit.
-
-### Q9: Google Drive link
-
-https://drive.google.com/drive/folders/1HjN-MBqpE0xfmjWTSCO4jnQtVXY-px_r?usp=drive_link
-
-### Q10: Three things for Monday?
-
-1. **Tier 1 ≠ Tier 2**: Don't retrain Tier 2 agents on volume/CSAT (harder cases by design)
-2. **Sample size**: Only trust metrics for n≥30 tickets/responses
-3. **Legacy caveat**: Pre-Sep 2025 trends are approximate (reconstructed timestamps)
-
-### Q11: Hours spent
-
-**5.5 hours** total (Phase 1-11)
-
-### Q12: GitHub link
-
-https://github.com/your-username/vireo-audio-support-analytics
-
----
-
-local host:
-
-http://localhost:8501/
-
-## How to Contribute
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/improvement`)
-3. Commit changes (`git commit -am 'Add improvement'`)
-4. Push to branch (`git push origin feature/improvement`)
-5. Open Pull Request
-
----
-
-## Support & Questions
-
-For questions about:
-
-- **Dashboard usage**: See app.py comments
-- **Data assumptions**: See `data/README.md`
-- **Metrics calculations**: See `src/metrics.py`
-- **Business logic**: See `reports/business_memo.md`
-
----
+- Dashboard usage: `app.py`
+- Data assumptions: `data/README.md`
+- Metric calculations: `src/metrics.py`
+- Validation logic: `src/validation.py`
+- Business decisions: `reports/business_memo.md`
 
 ## License
 
 Internal use only. Proprietary to Vireo Audio.
 
----
+## Author
 
-**Built by**: Punith Kumar AB  
-**For**: Priya Raman, Head of Customer Experience  
-**Date**: September 2026
+**Punith Kumar AB**
+
+- GitHub: [@punithkumar0927-ctrl](https://github.com/punithkumar0927-ctrl)
+- Repository: [Vireo Audio Support Analytics](https://github.com/punithkumar0927-ctrl/vireo-audio-support-analytics)
+- Built for: Priya Raman, Head of Customer Experience
+- Project date: September 2026
